@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Something Mobile Shop</title>
+<meta name="description" content="Myanmar mobile phone & accessories shop — Telegram Mini App">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: var(--tg-theme-secondary-bg-color, #f3f6fb);
+  --card: var(--tg-theme-section-bg-color, var(--tg-theme-bg-color, #ffffff));
+  --text: var(--tg-theme-text-color, #0f172a);
+  --hint: var(--tg-theme-hint-color, #64748b);
+  --accent: var(--tg-theme-button-color, #1a8fe3);
+  --accent-text: var(--tg-theme-button-text-color, #ffffff);
+  --sep: rgba(127,140,160,.2);
+  --soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --radius: 16px;
+  --star: #f5a623;
+  --red: #ef4444;
+  --green: #16a34a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,Padauk,"Myanmar Text",system-ui,sans-serif;font-size:14px;line-height:1.5}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+input,select,textarea{font:inherit;color:var(--text)}
+.app{max-width:680px;margin:0 auto;padding:0 12px 150px}
+body.tg .app{padding-bottom:84px}
+.hidden{display:none!important}
+.muted{color:var(--hint)}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0 8px;display:flex;gap:10px;align-items:center}
+.logo{width:36px;height:36px;border-radius:10px;background:var(--accent);display:grid;place-items:center;flex:none}
+.logo span{width:12px;height:20px;border:2.5px solid var(--accent-text);border-radius:4px}
+.brand b{display:block;font-weight:800;font-size:15px;letter-spacing:.3px;line-height:1.1}
+.brand small{color:var(--accent);font-size:9px;font-weight:700;letter-spacing:1px}
+.hello{margin-left:auto;font-size:12px;color:var(--hint);text-align:right;line-height:1.3;max-width:45%}
+.hello b{color:var(--text);display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search{position:relative;margin-bottom:12px}
+.search input{width:100%;height:42px;border-radius:12px;border:1px solid var(--sep);background:var(--card);padding:0 14px 0 38px;outline:none}
+.search input:focus{border-color:var(--accent)}
+.search svg{position:absolute;left:12px;top:12px;width:18px;height:18px;color:var(--hint)}
+
+/* hero carousel */
+.hero-wrap{overflow:hidden;border-radius:20px;margin-bottom:8px}
+.hero-track{display:flex;transition:transform .45s ease}
+.hero{flex:0 0 100%;padding:20px 18px;color:#fff;position:relative;overflow:hidden;min-height:190px}
+.hero::after{content:"";position:absolute;right:-40px;bottom:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%)}
+.hero .pill{display:inline-block;font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);margin-bottom:8px}
+.hero h1{margin:0 0 6px;font-size:19px;line-height:1.45;max-width:66%}
+.hero p{margin:0 0 12px;font-size:12px;opacity:.88;max-width:62%}
+.hero .art{position:absolute;right:14px;top:22px;height:150%;z-index:0;transform:rotate(14deg);pointer-events:none}
+.hero .art svg{height:100%;width:auto;filter:drop-shadow(0 12px 18px rgba(0,0,0,.45))}
+.hero h1,.hero p{position:relative;z-index:1}
+.hbtn{height:34px;padding:0 14px;border-radius:999px;font-size:12.5px;font-weight:700;background:#fff;color:#0b1f3a;position:relative;z-index:1}
+.dots{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
+.dots i{width:6px;height:6px;border-radius:3px;background:var(--sep);transition:.3s}
+.dots i.on{width:18px;background:var(--accent)}
+
+/* perks */
+.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.perks div{background:var(--card);border:1px solid var(--sep);border-radius:12px;padding:8px;text-align:center;font-size:10.5px;line-height:1.35}
+.perks span{display:block;font-size:18px}
+
+/* chips */
+.sec-title{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:700;margin:4px 0 10px}
+.sec-title a{font-size:12px;color:var(--accent);font-weight:600;cursor:pointer}
+.chips{display:flex;gap:8px;overflow-x:auto;margin:0 -12px 14px;padding:0 12px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:34px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--sep);font-size:12.5px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip.active{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+.brands .chip{height:38px;font-weight:700;font-size:12px}
+.brands .chip i{font-style:normal;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:11px;color:#fff}
+
+/* horizontal deals */
+.hscroll{display:flex;gap:10px;overflow-x:auto;margin:0 -12px 18px;padding:0 12px 4px;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.hscroll .card{flex:0 0 150px}
+
+.list-head{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--sep)}
+.list-head h2{margin:0;font-size:16px}
+.list-head small{color:var(--hint);font-size:11.5px}
+.filters{display:flex;gap:6px}
+.filters select{height:34px;border-radius:10px;border:1px solid var(--sep);background:var(--card);padding:0 6px;font-size:12px;max-width:120px}
+
+/* product cards */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:540px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid var(--sep);display:flex;flex-direction:column;cursor:pointer;transition:transform .12s;position:relative}
+.card:active{transform:scale(.98)}
+.thumb{aspect-ratio:1/1;position:relative;display:grid;place-items:center;font-size:56px;overflow:hidden}
+.thumb svg.ph{height:82%;width:auto;filter:drop-shadow(0 10px 14px rgba(0,0,0,.25))}
+.thumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.tag{position:absolute;top:8px;left:8px;font-size:9.5px;font-weight:800;letter-spacing:.4px;padding:3px 8px;border-radius:999px;background:var(--accent);color:var(--accent-text);z-index:2}
+.tag.hot{background:var(--red);color:#fff}
+.tag.off{background:var(--green);color:#fff}
+.heart{position:absolute;top:6px;right:6px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.85);display:grid;place-items:center;z-index:2;font-size:15px;color:#94a3b8}
+.heart.on{color:var(--red)}
+.body{padding:10px;display:flex;flex-direction:column;gap:2px;flex:1}
+.rating{font-size:11px;color:var(--hint)}
+.rating b{color:var(--star)}
+.name{font-weight:700;font-size:13px;line-height:1.35}
+.desc{font-size:11px;color:var(--hint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.swatches{display:flex;gap:4px;margin-top:3px}
+.swatches i{width:11px;height:11px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+.foot{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto;padding-top:6px;gap:4px}
+.old{font-size:10.5px;color:var(--hint);text-decoration:line-through;display:block;line-height:1.1}
+.price{font-weight:800;font-size:12.5px;color:var(--accent);white-space:nowrap}
+.add{width:32px;height:32px;flex:none;border-radius:10px;background:var(--soft);color:var(--accent);font-size:20px;font-weight:600;display:grid;place-items:center}
+.oos{font-size:10.5px;color:var(--red);font-weight:700}
+.empty{text-align:center;color:var(--hint);padding:48px 10px}
+.empty .big{font-size:44px;display:block;margin-bottom:6px}
+
+/* detail page */
+.page-head{display:flex;align-items:center;gap:8px;padding:12px 0;position:sticky;top:0;background:var(--bg);z-index:20}
+.page-head h2{margin:0;font-size:18px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.back,.icon-btn{width:38px;height:38px;border-radius:12px;background:var(--card);font-size:20px;flex:none;display:grid;place-items:center;border:1px solid var(--sep)}
+.icon-btn.on{color:var(--red)}
+.gallery{border-radius:20px;overflow:hidden;position:relative}
+.gallery .thumb{aspect-ratio:4/3.2}
+.gallery .thumb svg.ph{height:86%}
+.d-box{background:var(--card);border-radius:var(--radius);border:1px solid var(--sep);padding:14px;margin-top:10px}
+.d-box h3{margin:2px 0 4px;font-size:19px;line-height:1.35}
+.d-price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:6px}
+.d-price b{font-size:22px;color:var(--accent)}
+.d-price s{color:var(--hint);font-size:13px}
+.d-price em{font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--green);padding:2px 7px;border-radius:999px}
+.stock{font-size:12px;font-weight:600;margin-top:4px}
+.stock.ok{color:var(--green)} .stock.low{color:#d97706} .stock.no{color:var(--red)}
+.opt-label{font-size:12px;color:var(--hint);margin:2px 0 8px}
+.opt-label b{color:var(--text)}
+.colors{display:flex;gap:10px;flex-wrap:wrap}
+.colors button{width:34px;height:34px;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1px var(--sep)}
+.colors button.on{box-shadow:0 0 0 2px var(--accent)}
+.storages{display:flex;gap:8px;flex-wrap:wrap}
+.storages button{padding:8px 12px;border-radius:12px;border:1px solid var(--sep);font-size:12.5px;text-align:center;line-height:1.3;background:var(--card)}
+.storages button small{display:block;font-size:10.5px;color:var(--hint)}
+.storages button.on{border-color:var(--accent);background:var(--soft);color:var(--accent);font-weight:700}
+.specs{width:100%;border-collapse:collapse;font-size:13px}
+.specs td{padding:8px 0;border-bottom:1px solid var(--sep);vertical-align:top}
+.specs td:first-child{color:var(--hint);width:38%;padding-right:8px}
+.specs tr:last-child td{border:0}
+.qty{display:inline-flex;align-items:center;gap:4px;background:var(--soft);border-radius:12px;padding:3px}
+.qty button{width:32px;height:32px;color:var(--accent);font-size:19px;font-weight:700;border-radius:9px}
+.qty span{min-width:22px;text-align:center;font-weight:700}
+.inline-actions{display:flex;gap:8px;margin-top:12px}
+.btn{height:46px;border-radius:14px;font-weight:700;flex:1;padding:0 14px}
+.btn.primary{background:var(--accent);color:var(--accent-text)}
+.btn.outline{border:1.5px solid var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.5}
+
+/* rows */
+.row{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:10px;margin-bottom:8px;border:1px solid var(--sep)}
+.row .ic{width:62px;height:62px;border-radius:12px;display:grid;place-items:center;font-size:30px;flex:none;overflow:hidden;position:relative}
+.row .ic svg.ph{height:84%;width:auto}
+.row .ic img{width:100%;height:100%;object-fit:cover}
+.row .info{flex:1;min-width:0}
+.row .info b{display:block;font-size:13px;line-height:1.3}
+.row .info span{font-size:11.5px;color:var(--hint);display:block}
+.row .info strong{font-size:13px;color:var(--accent)}
+.row .rm{color:var(--hint);font-size:18px;width:28px;height:28px}
+.summary{background:var(--card);border-radius:14px;padding:12px 14px;border:1px solid var(--sep);margin-top:8px}
+.summary div{display:flex;justify-content:space-between;padding:4px 0;font-size:13px}
+.summary .disc{color:var(--green)}
+.summary .total{font-weight:800;font-size:16px;border-top:1px dashed var(--sep);margin-top:6px;padding-top:10px}
+.promo{display:flex;gap:8px;margin-top:8px}
+.promo input{flex:1;height:42px;border-radius:12px;border:1px solid var(--sep);background:var(--card);padding:0 12px;outline:none;text-transform:uppercase}
+.promo button{height:42px;padding:0 16px;border-radius:12px;background:var(--soft);color:var(--accent);font-weight:700}
+.note{font-size:11.5px;color:var(--hint);margin:8px 2px}
+
+/* form */
+.field{display:block;margin-bottom:12px}
+.field>span{display:block;font-size:12px;color:var(--hint);margin-bottom:4px}
+.field input,.field textarea,.field select{width:100%;border-radius:12px;border:1px solid var(--sep);background:var(--card);padding:11px 12px;outline:none}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field.err input,.field.err textarea,.field.err select{border-color:var(--red)}
+.pay{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pay label{border:1px solid var(--sep);background:var(--card);border-radius:12px;padding:10px 4px;text-align:center;font-size:11.5px;cursor:pointer}
+.pay input{display:none}
+.pay label:has(input:checked){border-color:var(--accent);background:var(--soft);color:var(--accent);font-weight:700}
+.pay .e{font-size:22px;display:block}
+
+/* orders */
+.order{background:var(--card);border:1px solid var(--sep);border-radius:14px;padding:12px;margin-bottom:10px}
+.order header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.order header b{font-size:14px}
+.status{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:#fef3c7;color:#92400e}
+.order ul{margin:0;padding:0 0 0 16px;font-size:12.5px}
+.order footer{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--hint)}
+.order footer b{color:var(--text);font-size:14px}
+
+.done{text-align:center;padding:50px 10px}
+.done .ok{width:84px;height:84px;border-radius:50%;background:var(--green);color:#fff;font-size:44px;display:grid;place-items:center;margin:0 auto 16px;animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(.3)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+
+/* bottom tab bar */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--sep);display:flex;justify-content:space-around;padding:6px 0 calc(6px + env(safe-area-inset-bottom))}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:10.5px;color:var(--hint);position:relative}
+.tabs button svg{width:23px;height:23px}
+.tabs button.on{color:var(--accent);font-weight:700}
+.tabs .badge{position:absolute;top:-3px;left:calc(50% + 4px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--red);color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center}
+
+/* fallback main button (outside Telegram) */
+.fab{position:fixed;left:12px;right:12px;bottom:72px;z-index:35;max-width:656px;margin:0 auto;height:50px;border-radius:14px;
+  background:var(--accent);color:var(--accent-text);font-weight:700;font-size:15px;box-shadow:0 8px 24px rgba(26,143,227,.35)}
+body.notabs .fab{bottom:14px}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%) translateY(-20px);opacity:0;z-index:80;background:rgba(15,23,42,.94);color:#fff;
+  padding:9px 16px;border-radius:999px;font-size:13px;transition:.2s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- HOME -->
+  <section id="v-home" class="view">
+    <header class="top">
+      <div class="logo"><span></span></div>
+      <div class="brand"><b>SOMETHING</b><small>MOBILE SHOP</small></div>
+      <div class="hello" id="hello"></div>
+    </header>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="ဖုန်း၊ brand သို့မဟုတ် accessories ရှာဖွေပါ...">
+    </div>
+
+    <div class="hero-wrap"><div class="hero-track" id="heroTrack"></div></div>
+    <div class="dots" id="dots"></div>
+
+    <div class="perks">
+      <div><span>✅</span>စစ်မှန်သော ပစ္စည်း 100%</div>
+      <div><span>🛡️</span>Warranty 1 နှစ်</div>
+      <div><span>🚚</span>တစ်နိုင်ငံလုံး ပို့ဆောင်</div>
+    </div>
+
+    <div id="dealsBlock">
+      <div class="sec-title">🔥 ယနေ့ အထူးလျှော့စျေး</div>
+      <div class="hscroll" id="deals"></div>
+    </div>
+
+    <div class="sec-title">🏷️ Brand အလိုက်</div>
+    <div class="chips brands" id="brands"></div>
+
+    <div class="sec-title">🗂️ အမျိုးအစား</div>
+    <div class="chips" id="chips"></div>
+
+    <div class="list-head" id="listTop">
+      <div><h2 id="listTitle">ပစ္စည်းအားလုံး</h2><small id="count"></small></div>
+      <div class="filters">
+        <select id="price" aria-label="Price">
+          <option value="all">စျေးနှုန်း အားလုံး</option>
+          <option value="0-500000">5 သိန်းအောက်</option>
+          <option value="500000-1500000">5 – 15 သိန်း</option>
+          <option value="1500000-3000000">15 – 30 သိန်း</option>
+          <option value="3000000-999999999">30 သိန်းအထက်</option>
+        </select>
+        <select id="sort" aria-label="Sort">
+          <option value="default">ထင်ရှားသော</option>
+          <option value="low">စျေး နည်း→များ</option>
+          <option value="high">စျေး များ→နည်း</option>
+          <option value="rating">Rating</option>
+          <option value="new">အသစ်ဆုံး</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <!-- DETAIL -->
+  <section id="v-detail" class="view hidden"></section>
+
+  <!-- WISHLIST -->
+  <section id="v-wish" class="view hidden">
+    <div class="page-head"><h2>❤️ နှစ်သက်သော ပစ္စည်းများ</h2></div>
+    <div class="grid" id="wishGrid"></div>
+  </section>
+
+  <!-- CART -->
+  <section id="v-cart" class="view hidden">
+    <div class="page-head"><h2>🛒 ခြင်းတောင်း</h2></div>
+    <div id="cartList"></div>
+    <div id="cartExtra">
+      <div class="promo"><input id="promo" placeholder="Promo code (ဥပမာ WELCOME5)"><button id="promoBtn">အသုံးပြုမည်</button></div>
+      <div class="summary" id="cartSummary"></div>
+      <p class="note">💡 ကျပ် 1,000,000 အထက် ဝယ်ယူပါက ပို့ဆောင်ခ အခမဲ့</p>
+    </div>
+  </section>
+
+  <!-- CHECKOUT -->
+  <section id="v-checkout" class="view hidden">
+    <div class="page-head"><button class="back" data-back>‹</button><h2>မှာယူမှု အချက်အလက်</h2></div>
+    <form id="form" novalidate onsubmit="return false">
+      <label class="field"><span>အမည်</span><input name="name" autocomplete="name" required></label>
+      <label class="field"><span>ဖုန်းနံပါတ်</span><input name="phone" type="tel" inputmode="tel" placeholder="09xxxxxxxxx" required></label>
+      <label class="field"><span>မြို့ / ဒေသ</span>
+        <select name="zone" id="zone" required></select></label>
+      <label class="field"><span>ပို့ဆောင်ရမည့် လိပ်စာ အပြည့်အစုံ</span><textarea name="address" rows="3" placeholder="အိမ်အမှတ်၊ လမ်း၊ ရပ်ကွက်၊ မြို့နယ်" required></textarea></label>
+      <div class="field"><span>ငွေပေးချေမှု နည်းလမ်း</span>
+        <div class="pay">
+          <label><input type="radio" name="pay" value="COD" checked><span class="e">💵</span>အိမ်ရောက်ငွေချေ</label>
+          <label><input type="radio" name="pay" value="KBZPay"><span class="e">📱</span>KBZPay</label>
+          <label><input type="radio" name="pay" value="WavePay"><span class="e">🌊</span>WavePay</label>
+          <label><input type="radio" name="pay" value="AYAPay"><span class="e">🏦</span>AYA Pay</label>
+          <label><input type="radio" name="pay" value="CBPay"><span class="e">💳</span>CB Pay</label>
+          <label><input type="radio" name="pay" value="Installment"><span class="e">🗓️</span>အရစ်ကျ</label>
+        </div>
+      </div>
+      <p class="note" id="payNote"></p>
+      <label class="field"><span>မှတ်ချက် (ရှိလျှင်)</span><input name="note" placeholder="ဥပမာ - ညနေ 5 နာရီနောက်ပိုင်း ပို့ပေးပါ"></label>
+    </form>
+    <div class="summary" id="checkoutSummary"></div>
+  </section>
+
+  <!-- ORDERS -->
+  <section id="v-orders" class="view hidden">
+    <div class="page-head"><h2>📦 ကျွန်ုပ်၏ အော်ဒါများ</h2></div>
+    <div id="orderList"></div>
+  </section>
+
+  <!-- DONE -->
+  <section id="v-done" class="view hidden">
+    <div class="done">
+      <div class="ok">✓</div>
+      <h2>အော်ဒါ တင်ပြီးပါပြီ!</h2>
+      <p class="muted">ကျေးဇူးတင်ပါသည်။ မကြာမီ Admin မှ ဖုန်းဖြင့် ဆက်သွယ် အတည်ပြုပေးပါမည်။</p>
+      <p id="orderId" style="font-weight:800;font-size:16px"></p>
+    </div>
+  </section>
+</div>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>ဆိုင်</button>
+  <button data-tab="wish"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.6-9 9-9 9z"/></svg>နှစ်သက်မှု<span class="badge hidden" id="wishBadge"></span></button>
+  <button data-tab="cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11.5l2-8H6"/></svg>ခြင်းတောင်း<span class="badge hidden" id="cartBadge"></span></button>
+  <button data-tab="orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>အော်ဒါ</button>
+</nav>
+
+<button class="fab hidden" id="fab"></button>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== CONFIG ===================== */
+const CONFIG = {
+  SHOP_NAME: "Something Mobile Shop",
+  ADMIN_USERNAME: "your_admin_username",   // Telegram username for support (without @)
+  ORDER_API: "",                           // optional backend URL (POST JSON). Empty = use tg.sendData (reply-keyboard launch)
+  FREE_SHIPPING_OVER: 1000000,
+  ZONES: [
+    {id:"ygn", label:"ရန်ကုန်", fee:3000},
+    {id:"mdy", label:"မန္တလေး", fee:3000},
+    {id:"npt", label:"နေပြည်တော်", fee:4000},
+    {id:"other", label:"အခြားမြို့များ (ကားဂိတ်ချ)", fee:5000},
+  ],
+  PROMOS: { WELCOME5: {pct:5, max:50000, label:"ကြိုဆိုရေး 5% လျှော့"}, PHONE10: {pct:10, max:100000, label:"10% လျှော့", min:2000000} },
+};
+
+/* ===================== DATA ===================== */
+const BRANDS = [
+  {id:"all", label:"အားလုံး", c:"#64748b", s:"★"},
+  {id:"Apple", label:"Apple", c:"#111827", s:""},
+  {id:"Samsung", label:"Samsung", c:"#1428a0", s:"S"},
+  {id:"Xiaomi", label:"Xiaomi", c:"#ff6900", s:"mi"},
+  {id:"OPPO", label:"OPPO", c:"#1f8a5b", s:"O"},
+  {id:"vivo", label:"vivo", c:"#415fff", s:"v"},
+  {id:"Google", label:"Pixel", c:"#4285f4", s:"G"},
+  {id:"Honor", label:"Honor", c:"#0b6cff", s:"H"},
+  {id:"realme", label:"realme", c:"#e5b700", s:"r"},
+  {id:"Anker", label:"Anker", c:"#00a7e1", s:"A"},
+];
+const CATEGORIES = [
+  {id:"all",   label:"အားလုံး", icon:"▦"},
+  {id:"phone", label:"Smartphones", icon:"📱"},
+  {id:"tablet",label:"Tablets", icon:"📲"},
+  {id:"audio", label:"Audio & Earphones", icon:"🎧"},
+  {id:"watch", label:"Smart Watch", icon:"⌚"},
+  {id:"charge",label:"Chargers & Power", icon:"⚡"},
+  {id:"case",  label:"Cases & Protection", icon:"🛡️"},
+];
+/* cam: camera style for the drawn phone — "tri" | "vert" | "bar" | "ring" | "duo"
+   img: optional real photo URL (https://...). If set, it replaces the drawing. */
+const C = (n,h)=>({n,h});
+const PRODUCTS = [
+  {id:1, cat:"phone", brand:"Apple", name:"iPhone 16 Pro Max", price:5450000, was:5800000, rating:4.9, reviews:214, tag:"NEW", stock:8, isNew:5, cam:"tri",
+   colors:[C("Desert Titanium","#c8b39b"),C("Natural Titanium","#bab6ae"),C("Black Titanium","#3b3b3d"),C("White Titanium","#eceae5")],
+   storage:[{s:"256GB",add:0},{s:"512GB",add:700000},{s:"1TB",add:1500000}],
+   desc:"A18 Pro chip, Camera Control, 5x Telephoto",
+   specs:{Display:'6.9" Super Retina XDR, 120Hz',Chip:"A18 Pro",Camera:"48MP Fusion + 48MP Ultra Wide + 12MP 5x",Battery:"Up to 33h video",OS:"iOS 18",Warranty:"1 Year"}},
+  {id:2, cat:"phone", brand:"Apple", name:"iPhone 15 Pro Max", price:4650000, was:4950000, rating:4.9, reviews:128, tag:"POPULAR", stock:5, isNew:3, cam:"tri",
+   colors:[C("Natural Titanium","#bab6ae"),C("Blue Titanium","#3f4a5a"),C("Black Titanium","#2f2f31")],
+   storage:[{s:"256GB",add:0},{s:"512GB",add:650000}],
+   desc:"Titanium design, A17 Pro, Action button, USB-C",
+   specs:{Display:'6.7" Super Retina XDR, 120Hz',Chip:"A17 Pro",Camera:"48MP Main + 12MP 5x Telephoto",Battery:"4441 mAh",OS:"iOS 18",Warranty:"1 Year"}},
+  {id:3, cat:"phone", brand:"Apple", name:"iPhone 16", price:3150000, rating:4.8, reviews:96, tag:"", stock:12, isNew:4, cam:"duo",
+   colors:[C("Ultramarine","#8193e8"),C("Teal","#a6cfc8"),C("Pink","#f1c1d2"),C("Black","#2c2c2e")],
+   storage:[{s:"128GB",add:0},{s:"256GB",add:400000}],
+   desc:"A18 chip, Camera Control, Action button",
+   specs:{Display:'6.1" Super Retina XDR',Chip:"A18",Camera:"48MP Fusion + 12MP Ultra Wide",Battery:"Up to 22h video",OS:"iOS 18",Warranty:"1 Year"}},
+  {id:4, cat:"phone", brand:"Samsung", name:"Galaxy S24 Ultra", price:4900000, was:5300000, rating:4.8, reviews:176, tag:"HOT DEAL", stock:6, isNew:3, cam:"vert",
+   colors:[C("Titanium Violet","#a8a3c9"),C("Titanium Gray","#8e8d8a"),C("Titanium Black","#2b2b2b"),C("Titanium Yellow","#e8dcb0")],
+   storage:[{s:"256GB",add:0},{s:"512GB",add:550000}],
+   desc:"Galaxy AI, 200MP camera, built-in S Pen",
+   specs:{Display:'6.8" QHD+ Dynamic AMOLED 2X, 120Hz',Chip:"Snapdragon 8 Gen 3 for Galaxy",Camera:"200MP + 50MP 5x + 10MP 3x + 12MP UW",Battery:"5000 mAh, 45W",OS:"Android 14, One UI 6.1",Warranty:"1 Year"}},
+  {id:5, cat:"phone", brand:"Samsung", name:"Galaxy Z Flip6", price:3600000, rating:4.6, reviews:48, tag:"", stock:3, isNew:4, cam:"duo",
+   colors:[C("Mint","#bfe6d2"),C("Blue","#9db7e0"),C("Yellow","#f2e39b"),C("Silver Shadow","#cfd2d6")],
+   storage:[{s:"256GB",add:0},{s:"512GB",add:450000}],
+   desc:"Foldable, FlexWindow, Galaxy AI",
+   specs:{Display:'6.7" FHD+ Foldable + 3.4" cover',Chip:"Snapdragon 8 Gen 3",Camera:"50MP + 12MP UW",Battery:"4000 mAh",OS:"Android 14",Warranty:"1 Year"}},
+  {id:6, cat:"phone", brand:"Samsung", name:"Galaxy A55 5G", price:1350000, was:1450000, rating:4.6, reviews:132, tag:"BEST SELLER", stock:20, isNew:2, cam:"vert",
+   colors:[C("Awesome Iceblue","#bcd6ee"),C("Awesome Navy","#2d3548"),C("Awesome Lilac","#d8cbe8")],
+   storage:[{s:"128GB",add:0},{s:"256GB",add:150000}],
+   desc:"Metal frame, IP67, 50MP OIS camera",
+   specs:{Display:'6.6" FHD+ Super AMOLED 120Hz',Chip:"Exynos 1480",Camera:"50MP OIS + 12MP UW + 5MP Macro",Battery:"5000 mAh, 25W",OS:"Android 14",Warranty:"1 Year"}},
+  {id:7, cat:"phone", brand:"Xiaomi", name:"Xiaomi 14T Pro", price:2650000, rating:4.7, reviews:61, tag:"NEW", stock:7, isNew:5, cam:"tri",
+   colors:[C("Titan Blue","#5f7b9c"),C("Titan Gray","#9a9c9e"),C("Titan Black","#232323")],
+   storage:[{s:"512GB",add:0},{s:"1TB",add:300000}],
+   desc:"Leica optics, 120W HyperCharge",
+   specs:{Display:'6.67" 1.5K AMOLED 144Hz',Chip:"Dimensity 9300+",Camera:"50MP Leica + 50MP 2.6x + 12MP UW",Battery:"5000 mAh, 120W",OS:"HyperOS",Warranty:"1 Year"}},
+  {id:8, cat:"phone", brand:"Xiaomi", name:"Redmi Note 13 Pro+ 5G", price:1150000, was:1250000, rating:4.5, reviews:203, tag:"BEST SELLER", stock:25, isNew:2, cam:"ring",
+   colors:[C("Aurora Purple","#b39ddb"),C("Midnight Black","#1f1f1f"),C("Moonlight White","#f1f1ef")],
+   storage:[{s:"256GB",add:0},{s:"512GB",add:120000}],
+   desc:"200MP camera, IP68, 120W charging",
+   specs:{Display:'6.67" 1.5K curved AMOLED',Chip:"Dimensity 7200-Ultra",Camera:"200MP OIS + 8MP + 2MP",Battery:"5000 mAh, 120W",OS:"Android 13, MIUI 14",Warranty:"1 Year"}},
+  {id:9, cat:"phone", brand:"OPPO", name:"OPPO Reno12 Pro 5G", price:1650000, rating:4.5, reviews:57, tag:"", stock:9, isNew:4, cam:"vert",
+   colors:[C("Space Brown","#6b5446"),C("Nebula Silver","#d9dbe3")],
+   storage:[{s:"256GB",add:0},{s:"512GB",add:180000}],
+   desc:"AI Portrait, 50MP selfie, 80W SUPERVOOC",
+   specs:{Display:'6.7" AMOLED 120Hz',Chip:"Dimensity 7300-Energy",Camera:"50MP + 50MP 2x + 8MP UW",Battery:"5000 mAh, 80W",OS:"ColorOS 14",Warranty:"1 Year"}},
+  {id:10, cat:"phone", brand:"vivo", name:"vivo V40 5G", price:1550000, rating:4.5, reviews:39, tag:"", stock:0, isNew:4, cam:"ring",
+   colors:[C("Lotus Purple","#c9b8e8"),C("Titanium Gray","#8d9196")],
+   storage:[{s:"256GB",add:0}],
+   desc:"ZEISS optics, Aura Light portrait",
+   specs:{Display:'6.78" AMOLED 120Hz',Chip:"Snapdragon 7 Gen 3",Camera:"50MP ZEISS + 50MP UW",Battery:"5500 mAh, 80W",OS:"Funtouch OS 14",Warranty:"1 Year"}},
+  {id:11, cat:"phone", brand:"Google", name:"Google Pixel 9 Pro", price:3900000, rating:4.8, reviews:44, tag:"NEW", stock:4, isNew:5, cam:"bar",
+   colors:[C("Porcelain","#ece6dc"),C("Rose Quartz","#ecc7c4"),C("Hazel","#8a9183"),C("Obsidian","#232323")],
+   storage:[{s:"128GB",add:0},{s:"256GB",add:350000}],
+   desc:"Gemini AI, Tensor G4, 7 years of updates",
+   specs:{Display:'6.3" Super Actua LTPO 120Hz',Chip:"Google Tensor G4",Camera:"50MP + 48MP 5x + 48MP UW",Battery:"4700 mAh",OS:"Android 15",Warranty:"1 Year"}},
+  {id:12, cat:"phone", brand:"Honor", name:"Honor Magic6 Pro", price:3300000, was:3600000, rating:4.6, reviews:22, tag:"", stock:3, isNew:3, cam:"ring",
+   colors:[C("Epi Green","#4f7b67"),C("Black","#1d1d1d")],
+   storage:[{s:"512GB",add:0}],
+   desc:"180MP periscope, 5600 mAh silicon-carbon battery",
+   specs:{Display:'6.8" LTPO OLED 120Hz',Chip:"Snapdragon 8 Gen 3",Camera:"50MP + 180MP 2.5x + 50MP UW",Battery:"5600 mAh, 80W",OS:"MagicOS 8",Warranty:"1 Year"}},
+  {id:13, cat:"phone", brand:"realme", name:"realme 12 Pro+ 5G", price:1250000, rating:4.4, reviews:71, tag:"", stock:11, isNew:2, cam:"ring",
+   colors:[C("Submarine Blue","#2f4a6b"),C("Navigator Beige","#d9c9ad")],
+   storage:[{s:"256GB",add:0},{s:"512GB",add:100000}],
+   desc:"Periscope portrait camera, luxury watch design",
+   specs:{Display:'6.7" curved AMOLED 120Hz',Chip:"Snapdragon 7s Gen 2",Camera:"50MP + 64MP 3x periscope + 8MP UW",Battery:"5000 mAh, 67W",OS:"realme UI 5.0",Warranty:"1 Year"}},
+  {id:14, cat:"tablet", brand:"Apple", name:"iPad Air 11\" (M2)", price:2650000, rating:4.8, reviews:35, tag:"", stock:5, isNew:3, emoji:"📲", bg:["#dbeafe","#6b8fc7"],
+   colors:[C("Blue","#9db7d9"),C("Space Gray","#5b5d61"),C("Starlight","#e8e0d2")],
+   storage:[{s:"128GB",add:0},{s:"256GB",add:400000}],
+   desc:"M2 chip, Apple Pencil Pro support",
+   specs:{Display:'11" Liquid Retina',Chip:"Apple M2",Camera:"12MP Wide",Battery:"Up to 10h",OS:"iPadOS 18",Warranty:"1 Year"}},
+  {id:15, cat:"audio", brand:"Apple", name:"AirPods Pro (2nd Gen, USB-C)", price:680000, was:750000, rating:4.9, reviews:310, tag:"BEST SELLER", stock:30, isNew:2, emoji:"🎧", bg:["#f8fafc","#cbd5e1"],
+   desc:"Active Noise Cancellation, Adaptive Audio", specs:{Feature:"ANC + Transparency",Battery:"Up to 6h (30h with case)",Charging:"USB-C / MagSafe",Warranty:"1 Year"}},
+  {id:16, cat:"audio", brand:"Samsung", name:"Galaxy Buds3 Pro", price:620000, rating:4.6, reviews:52, tag:"", stock:10, isNew:4, emoji:"🎧", bg:["#e2e8f0","#475569"],
+   desc:"Blade lights design, Galaxy AI interpreter", specs:{Feature:"Adaptive ANC",Battery:"Up to 6h (26h with case)",Charging:"USB-C / Wireless",Warranty:"1 Year"}},
+  {id:17, cat:"watch", brand:"Apple", name:"Apple Watch Series 10", price:1350000, rating:4.8, reviews:41, tag:"NEW", stock:6, isNew:5, emoji:"⌚", bg:["#fce7f3","#9d4b73"],
+   colors:[C("Jet Black","#1e1e1e"),C("Rose Gold","#e7c3b4"),C("Silver","#d5d7da")],
+   desc:"Thinnest Apple Watch, sleep apnea alerts", specs:{Display:"Wide-angle OLED",Size:"42mm / 46mm",Battery:"Up to 18h",Warranty:"1 Year"}},
+  {id:18, cat:"charge", brand:"Anker", name:"Anker 20000mAh PowerBank", price:135000, rating:4.7, reviews:84, tag:"", stock:40, isNew:1, emoji:"🔋", bg:["#bfdbfe","#1e3a8a"],
+   desc:"Dual USB output, PowerIQ fast charging", specs:{Capacity:"20000 mAh",Output:"2× USB-A + USB-C",Feature:"PowerIQ",Warranty:"6 Months"}},
+  {id:19, cat:"charge", brand:"Anker", name:"Anker 65W GaN Charger", price:95000, was:115000, rating:4.7, reviews:66, tag:"HOT DEAL", stock:35, isNew:2, emoji:"🔌", bg:["#f8fafc","#94a3b8"],
+   desc:"2× USB-C + USB-A, foldable plug", specs:{Power:"65W total",Ports:"2× USB-C + 1× USB-A",Tech:"GaN II, PD 3.0",Warranty:"6 Months"}},
+  {id:20, cat:"case", brand:"Apple", name:"MagSafe Clear Case (iPhone 16 series)", price:25000, rating:4.5, reviews:42, tag:"", stock:50, isNew:3, emoji:"🛡️", bg:["#fde68a","#b45309"],
+   storage:[{s:"16",add:0},{s:"16 Plus",add:0},{s:"16 Pro",add:0},{s:"16 Pro Max",add:0}], optLabel:"Model",
+   desc:"Strong magnetic alignment, anti-yellowing", specs:{Material:"Polycarbonate + TPU",Feature:"MagSafe compatible",Protection:"Raised camera edge",Warranty:"—"}},
+  {id:21, cat:"case", brand:"Anker", name:"Tempered Glass Screen Protector (2-pack)", price:15000, rating:4.4, reviews:88, tag:"", stock:100, isNew:1, emoji:"🪟", bg:["#e0f2fe","#0369a1"],
+   desc:"9H hardness, easy-install frame", specs:{Hardness:"9H",Pack:"2 pcs",Feature:"Bubble-free install frame",Warranty:"—"}},
+];
+
+const SLIDES = [
+  {pill:"အသစ်ရောက် ✨", h:"iPhone 16 Pro Max ရောက်ပါပြီ", p:"အဆင့်မြင့် A18 Pro chip နှင့် Camera Control", btn:"ကြည့်မည်", go:{open:1}, bg:"radial-gradient(120% 140% at 100% 0%,#3a4a63 0%,#151a24 50%,#0b0d12 100%)", ph:{h:"#c8b39b",cam:"tri"}},
+  {pill:"အထူးလျှော့စျေး 🔥", h:"Galaxy S24 Ultra 4 သိန်းအထိ လျှော့", p:"Galaxy AI ပါဝင်သော flagship ကို အခုပဲ ဝယ်ယူပါ", btn:"ဝယ်မည်", go:{open:4}, bg:"radial-gradient(120% 140% at 100% 0%,#4d3d8f 0%,#1d1640 55%,#0e0b22 100%)", ph:{h:"#a8a3c9",cam:"vert"}},
+  {pill:"Promo Code 🎁", h:"WELCOME5 ဖြင့် 5% ထပ်လျှော့", p:"ပထမဆုံး အော်ဒါအတွက် ကျပ် 50,000 အထိ လျှော့စျေး", btn:"ဈေးဝယ်မည်", go:{scroll:true}, bg:"radial-gradient(120% 140% at 100% 0%,#1d6f86 0%,#0b2f3a 50%,#071a22 100%)", ph:{h:"#ff6900",cam:"ring"}},
+];
+
+/* ===================== HELPERS ===================== */
+const $ = s => document.querySelector(s);
+const fmt = n => Math.round(n).toLocaleString("en-US") + " Ks";
+const byId = id => PRODUCTS.find(p => p.id == id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+function shade(hex, amt){ // lighten (+) / darken (-) a hex color
+  const n = parseInt(hex.slice(1),16); let r=n>>16, g=n>>8&255, b=n&255;
+  const f = v => Math.max(0, Math.min(255, Math.round(amt<0 ? v*(1+amt) : v+(255-v)*amt)));
+  return "#" + [f(r),f(g),f(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+
+/* Drawn phone back (no external images needed) */
+function phoneSVG(hex, cam="tri"){
+  const id = "g" + Math.random().toString(36).slice(2,8);
+  const lens = (x,y,r=9) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#111"/><circle cx="${x}" cy="${y}" r="${r*.62}" fill="#23324a"/><circle cx="${x-r*.25}" cy="${y-r*.25}" r="${r*.2}" fill="#7aa2d6" opacity=".8"/>`;
+  let camera = "";
+  if (cam==="tri") camera = `<rect x="14" y="14" width="52" height="54" rx="15" fill="${shade(hex,-.12)}" stroke="${shade(hex,.25)}"/>${lens(29,30)}${lens(29,53)}${lens(51,41)}<circle cx="52" cy="22" r="3" fill="#eee" opacity=".7"/>`;
+  if (cam==="duo") camera = `<rect x="14" y="14" width="34" height="56" rx="16" fill="${shade(hex,-.1)}" stroke="${shade(hex,.25)}"/>${lens(31,30)}${lens(31,54)}`;
+  if (cam==="vert") camera = `${lens(26,26)}${lens(26,50)}${lens(26,74)}<circle cx="44" cy="26" r="3" fill="#eee" opacity=".7"/>`;
+  if (cam==="bar") camera = `<rect x="6" y="24" width="98" height="30" rx="15" fill="${shade(hex,-.35)}"/>${lens(26,39,10)}${lens(50,39,10)}${lens(76,39,8)}`;
+  if (cam==="ring") camera = `<circle cx="55" cy="44" r="32" fill="${shade(hex,-.15)}" stroke="${shade(hex,.3)}" stroke-width="2"/>${lens(42,32,10)}${lens(68,32,10)}${lens(42,58,10)}<circle cx="68" cy="58" r="4" fill="#eee" opacity=".7"/>`;
+  return `<svg class="ph" viewBox="0 0 110 220" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${shade(hex,.28)}"/><stop offset=".55" stop-color="${hex}"/><stop offset="1" stop-color="${shade(hex,-.22)}"/></linearGradient></defs>
+    <rect x="2" y="2" width="106" height="216" rx="20" fill="${shade(hex,-.3)}"/>
+    <rect x="4" y="4" width="102" height="212" rx="18" fill="url(#${id})"/>
+    <path d="M4 60 Q55 40 106 20 L106 4 L4 4Z" fill="#fff" opacity=".08"/>
+    ${camera}
+    <text x="55" y="160" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="${shade(hex,-.35)}" opacity=".5">SOMETHING</text>
+  </svg>`;
+}
+function visual(p, colorIdx=0){
+  const col = p.colors?.[colorIdx]?.h;
+  if (p.img) return `<img src="${esc(p.img)}" alt="" loading="lazy">`;
+  if (p.cat==="phone") return phoneSVG(col || "#888", p.cam);
+  return `<span>${p.emoji||"📦"}</span>`;
+}
+function visualBG(p, colorIdx=0){
+  if (p.cat==="phone") { const h = p.colors?.[colorIdx]?.h || "#ccc"; return `linear-gradient(160deg,${shade(h,.82)},${shade(h,.45)})`; }
+  const bg = p.bg || ["#e2e8f0","#94a3b8"]; return `linear-gradient(145deg,${bg[0]},${bg[1]})`;
+}
+const unitPrice = (p, si=0) => p.price + (p.storage?.[si]?.add || 0);
+const discountPct = p => p.was ? Math.round((1 - p.price/p.was)*100) : 0;
+
+/* ===================== TELEGRAM ===================== */
+const tg = window.Telegram?.WebApp;
+const inTG = !!(tg && tg.initData);
+if (inTG) document.body.classList.add("tg");
+if (tg) {
+  tg.ready(); tg.expand();
+  try { tg.setHeaderColor("secondary_bg_color"); tg.setBackgroundColor("secondary_bg_color"); } catch {}
+  try { tg.disableVerticalSwipes?.(); } catch {}
+  try { tg.enableClosingConfirmation?.(); } catch {}
+}
+const haptic = (t="light") => { try { tg?.HapticFeedback?.impactOccurred(t); } catch {} };
+const notify = (t="success") => { try { tg?.HapticFeedback?.notificationOccurred(t); } catch {} };
+const tgUser = tg?.initDataUnsafe?.user;
+
+const fab = $("#fab");
+let mainHandler = null;
+function setMain(text, handler){
+  if (inTG) {
+    if (mainHandler) tg.MainButton.offClick(mainHandler);
+    mainHandler = handler;
+    if (!text) { tg.MainButton.hide(); return; }
+    tg.MainButton.setParams({text, is_visible:true, is_active:true});
+    tg.MainButton.onClick(mainHandler);
+  } else {
+    mainHandler = handler;
+    fab.textContent = text || "";
+    fab.classList.toggle("hidden", !text);
+  }
+}
+fab.onclick = () => mainHandler && mainHandler();
+function mainLoading(on){ if (inTG) { on ? tg.MainButton.showProgress() : tg.MainButton.hideProgress(); } else fab.disabled = on; }
+
+/* ===================== STATE ===================== */
+let cart = store.get("cart2", {});        // key "id|color|storage" -> qty
+let wish = store.get("wish", []);         // [productId]
+let orders = store.get("orders", []);     // order history
+let promo = store.get("promo", "");
+let filter = {cat:"all", brand:"all", q:"", sort:"default", price:"all"};
+let view = "home", detail = null;         // detail = {id, ci, si, qty}
+const history_ = [];
+
+function persist(){
+  store.set("cart2", cart); store.set("wish", wish); store.set("orders", orders); store.set("promo", promo);
+  try { if (inTG && tg.CloudStorage) tg.CloudStorage.setItem("cart2", JSON.stringify(cart)); } catch {}
+}
+const parseKey = k => { const [id,ci,si] = k.split("|").map(Number); return {p:byId(id), ci, si}; };
+const cartLines = () => Object.entries(cart).map(([k,q]) => ({k, q, ...parseKey(k)})).filter(l => l.p);
+const cartCount = () => cartLines().reduce((a,l)=>a+l.q,0);
+const subtotal = () => cartLines().reduce((s,l)=>s+unitPrice(l.p,l.si)*l.q,0);
+function promoDiscount(st = subtotal()){
+  const pr = CONFIG.PROMOS[promo]; if (!pr) return 0;
+  if (pr.min && st < pr.min) return 0;
+  return Math.min(st*pr.pct/100, pr.max);
+}
+function shipping(st = subtotal()){
+  if (st >= CONFIG.FREE_SHIPPING_OVER) return 0;
+  const z = CONFIG.ZONES.find(z => z.id === ($("#zone")?.value || "ygn"));
+  return z ? z.fee : 3000;
+}
+const grandTotal = () => { const st = subtotal(); return st - promoDiscount(st) + shipping(st); };
+
+function addToCart(id, ci=0, si=0, qty=1){
+  const p = byId(id); if (!p || !p.stock) { toast("❌ ပစ္စည်း ကုန်နေပါသည်"); notify("error"); return false; }
+  const k = `${id}|${ci}|${si}`;
+  const cur = cart[k] || 0;
+  if (cur + qty > p.stock) { toast(`⚠️ လက်ကျန် ${p.stock} ခုသာ ရှိပါသည်`); notify("warning"); return false; }
+  cart[k] = cur + qty; persist(); notify(); toast("✅ ခြင်းတောင်းထဲ ထည့်ပြီးပါပြီ"); renderBadges(); return true;
+}
+function setLineQty(k, q){
+  const {p} = parseKey(k);
+  if (q <= 0) delete cart[k]; else if (q > p.stock) { toast(`⚠️ လက်ကျန် ${p.stock} ခုသာ ရှိပါသည်`); return; } else cart[k] = q;
+  persist(); haptic(); refresh();
+}
+function toggleWish(id){
+  const i = wish.indexOf(id);
+  if (i >= 0) { wish.splice(i,1); toast("💔 နှစ်သက်မှုမှ ဖယ်ရှားပြီး"); } else { wish.push(id); toast("❤️ နှစ်သက်မှုထဲ ထည့်ပြီး"); }
+  haptic(); persist(); refresh();
+}
+
+/* ===================== RENDER: cards ===================== */
+function cardHTML(p){
+  const off = discountPct(p);
+  return `<article class="card" data-open="${p.id}">
+    <div class="thumb" style="background:${visualBG(p)}">${visual(p)}
+      ${p.tag ? `<span class="tag ${p.tag==="HOT DEAL"?"hot":""}">${p.tag}</span>` : off ? `<span class="tag off">-${off}%</span>` : ""}
+      <button class="heart ${wish.includes(p.id)?"on":""}" data-wish="${p.id}" aria-label="wishlist">${wish.includes(p.id)?"♥":"♡"}</button>
+    </div>
+    <div class="body">
+      <div class="rating"><b>★</b> ${p.rating} (${p.reviews})</div>
+      <div class="name">${esc(p.name)}</div>
+      <div class="desc">${esc(p.desc)}</div>
+      ${p.colors ? `<div class="swatches">${p.colors.slice(0,5).map(c=>`<i style="background:${c.h}"></i>`).join("")}</div>` : ""}
+      <div class="foot">
+        <div>${p.was?`<span class="old">${fmt(p.was)}</span>`:""}<span class="price">${fmt(p.price)}</span></div>
+        ${p.stock ? `<button class="add" data-quick="${p.id}" aria-label="add">+</button>` : `<span class="oos">ကုန်နေ</span>`}
+      </div>
+    </div>
+  </article>`;
+}
+function filtered(){
+  const q = filter.q.trim().toLowerCase();
+  const [lo,hi] = filter.price==="all" ? [0,Infinity] : filter.price.split("-").map(Number);
+  let list = PRODUCTS.filter(p =>
+    (filter.cat==="all" || p.cat===filter.cat) &&
+    (filter.brand==="all" || p.brand===filter.brand) &&
+    p.price >= lo && p.price < hi &&
+    (!q || `${p.name} ${p.brand} ${p.desc} ${p.cat}`.toLowerCase().includes(q)));
+  const s = filter.sort;
+  if (s==="low") list.sort((a,b)=>a.price-b.price);
+  if (s==="high") list.sort((a,b)=>b.price-a.price);
+  if (s==="rating") list.sort((a,b)=>b.rating-a.rating||b.reviews-a.reviews);
+  if (s==="new") list.sort((a,b)=>b.isNew-a.isNew);
+  if (s==="default") list.sort((a,b)=>(b.stock>0)-(a.stock>0));
+  return list;
+}
+function renderHome(){
+  $("#brands").innerHTML = BRANDS.map(b => `<button class="chip ${filter.brand===b.id?"active":""}" data-brand="${b.id}"><i style="background:${b.c}">${b.s}</i>${b.label}</button>`).join("");
+  $("#chips").innerHTML = CATEGORIES.map(c => `<button class="chip ${filter.cat===c.id?"active":""}" data-cat="${c.id}">${c.icon} ${c.label}</button>`).join("");
+  const deals = PRODUCTS.filter(p => p.was);
+  $("#deals").innerHTML = deals.map(cardHTML).join("");
+  const filtering = filter.q || filter.cat!=="all" || filter.brand!=="all" || filter.price!=="all";
+  $("#dealsBlock").classList.toggle("hidden", !!filtering);
+  const list = filtered();
+  const titleBits = [filter.brand!=="all" ? filter.brand : "", filter.cat!=="all" ? CATEGORIES.find(c=>c.id===filter.cat).label : ""].filter(Boolean);
+  $("#listTitle").textContent = titleBits.length ? titleBits.join(" · ") : "ပစ္စည်းအားလုံး";
+  $("#count").textContent = `စုစုပေါင်း ${list.length} မျိုး`;
+  $("#grid").innerHTML = list.length ? list.map(cardHTML).join("")
+    : `<div class="empty" style="grid-column:1/-1"><span class="big">🔍</span>ရှာဖွေမှုနှင့် ကိုက်ညီသော ပစ္စည်း မရှိပါ<br><br><button class="btn outline" style="flex:none;height:38px" data-reset>Filter ပြန်ဖျက်မည်</button></div>`;
+}
+
+/* ===================== RENDER: detail ===================== */
+function renderDetail(){
+  const {id, ci, si, qty} = detail; const p = byId(id);
+  const price = unitPrice(p, si), was = p.was ? p.was + (p.storage?.[si]?.add||0) : 0;
+  const stockCls = !p.stock ? "no" : p.stock <= 5 ? "low" : "ok";
+  const stockTxt = !p.stock ? "● ပစ္စည်း ကုန်နေပါသည်" : p.stock <= 5 ? `● လက်ကျန် ${p.stock} ခုသာ` : "● ပစ္စည်း အသင့်ရှိ";
+  const related = PRODUCTS.filter(x => x.id!==p.id && (x.brand===p.brand || x.cat===p.cat)).slice(0,6);
+  const monthly = Math.ceil(price/6/1000)*1000;
+  $("#v-detail").innerHTML = `
+    <div class="page-head"><button class="back" data-back>‹</button><h2>${esc(p.brand)}</h2>
+      <button class="icon-btn ${wish.includes(p.id)?"on":""}" data-wish="${p.id}">${wish.includes(p.id)?"♥":"♡"}</button>
+      <button class="icon-btn" id="shareBtn" aria-label="share">↗</button></div>
+    <div class="gallery"><div class="thumb" style="background:${visualBG(p,ci)}">${visual(p,ci)}${discountPct(p)?`<span class="tag off">-${discountPct(p)}%</span>`:""}</div></div>
+    <div class="d-box">
+      <div class="rating"><b>★</b> ${p.rating} · ${p.reviews} reviews</div>
+      <h3>${esc(p.name)}</h3>
+      <div class="muted">${esc(p.desc)}</div>
+      <div class="d-price"><b>${fmt(price)}</b>${was?`<s>${fmt(was)}</s><em>-${fmt(was-price)}</em>`:""}</div>
+      <div class="stock ${stockCls}">${stockTxt}</div>
+      ${price>=500000?`<div class="note" style="margin:6px 0 0">🗓️ အရစ်ကျ 6 လ — လစဉ် ${fmt(monthly)} ခန့်မှ စတင်</div>`:""}
+    </div>
+    ${p.colors ? `<div class="d-box"><div class="opt-label">အရောင် — <b>${esc(p.colors[ci].n)}</b></div>
+      <div class="colors">${p.colors.map((c,i)=>`<button class="${i===ci?"on":""}" style="background:${c.h}" data-ci="${i}" aria-label="${esc(c.n)}"></button>`).join("")}</div></div>` : ""}
+    ${p.storage ? `<div class="d-box"><div class="opt-label">${p.optLabel || "သိုလှောင်မှု (Storage)"}</div>
+      <div class="storages">${p.storage.map((s,i)=>`<button class="${i===si?"on":""}" data-si="${i}">${s.s}${s.add?`<small>+${fmt(s.add)}</small>`:""}</button>`).join("")}</div></div>` : ""}
+    <div class="d-box"><div class="opt-label">အရေအတွက်</div>
+      <div class="qty"><button data-dq="-1">−</button><span>${qty}</span><button data-dq="1">+</button></div>
+      <div class="inline-actions">
+        <button class="btn outline" data-addd ${!p.stock?"disabled":""}>🛒 ခြင်းတောင်းထဲထည့်</button>
+        <button class="btn primary" data-buynow ${!p.stock?"disabled":""}>ယခုဝယ်မည်</button>
+      </div></div>
+    <div class="d-box"><div class="opt-label"><b>အသေးစိတ် Specifications</b></div>
+      <table class="specs">${Object.entries(p.specs).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</table></div>
+    <div class="d-box" style="font-size:12.5px;line-height:1.8">✅ မူရင်း စစ်မှန်ကြောင်း အာမခံ<br>🔁 7 ရက်အတွင်း စက်ချို့ယွင်းပါက လဲလှယ်ပေး<br>🚚 ရန်ကုန်/မန္တလေး 1–2 ရက်အတွင်း ပို့ဆောင်</div>
+    ${related.length ? `<div class="sec-title" style="margin-top:16px">ဆက်စပ်ပစ္စည်းများ</div><div class="hscroll">${related.map(cardHTML).join("")}</div>` : ""}`;
+  $("#shareBtn").onclick = () => {
+    const text = `${p.name} — ${fmt(price)} | ${CONFIG.SHOP_NAME}`;
+    const url = location.href.split("#")[0];
+    if (inTG) tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+    else if (navigator.share) navigator.share({title:p.name, text, url}).catch(()=>{});
+    else { navigator.clipboard?.writeText(`${text} ${url}`); toast("🔗 Link ကူးယူပြီးပါပြီ"); }
+  };
+}
+
+/* ===================== RENDER: wish / cart / checkout / orders ===================== */
+function renderWish(){
+  const list = wish.map(byId).filter(Boolean);
+  $("#wishGrid").innerHTML = list.length ? list.map(cardHTML).join("")
+    : `<div class="empty" style="grid-column:1/-1"><span class="big">🤍</span>နှစ်သက်သော ပစ္စည်း မရှိသေးပါ<br>ပစ္စည်းများပေါ်ရှိ ♡ ကို နှိပ်ပြီး သိမ်းထားနိုင်ပါသည်</div>`;
+}
+function lineHTML(l){
+  const {p,ci,si,q,k} = l;
+  const opts = [p.colors?.[ci]?.n, p.storage?.[si]?.s].filter(Boolean).join(" · ");
+  return `<div class="row">
+    <div class="ic" style="background:${visualBG(p,ci)}" data-open="${p.id}">${visual(p,ci)}</div>
+    <div class="info"><b>${esc(p.name)}</b><span>${esc(opts)}</span><strong>${fmt(unitPrice(p,si))}</strong></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+      <button class="rm" data-rm="${k}" aria-label="remove">✕</button>
+      <div class="qty"><button data-lq="${k}" data-d="-1" style="width:28px;height:28px">−</button><span>${q}</span><button data-lq="${k}" data-d="1" style="width:28px;height:28px">+</button></div>
+    </div></div>`;
+}
+function summaryHTML(){
+  const st = subtotal(), d = promoDiscount(st), sh = shipping(st);
+  const pr = CONFIG.PROMOS[promo];
+  return `<div><span>ပစ္စည်းတန်ဖိုး (${cartCount()} ခု)</span><span>${fmt(st)}</span></div>
+    ${pr ? `<div class="disc"><span>🎁 ${promo} ${d?"":"(အနည်းဆုံး "+fmt(pr.min||0)+")"}</span><span>-${fmt(d)}</span></div>` : ""}
+    <div><span>ပို့ဆောင်ခ</span><span>${sh ? fmt(sh) : "အခမဲ့ 🎉"}</span></div>
+    <div class="total"><span>စုစုပေါင်း</span><span>${fmt(st-d+sh)}</span></div>`;
+}
+function renderCart(){
+  const lines = cartLines();
+  $("#cartList").innerHTML = lines.length ? lines.map(lineHTML).join("")
+    : `<div class="empty"><span class="big">🛒</span>ခြင်းတောင်းထဲတွင် ပစ္စည်း မရှိသေးပါ<br><br><button class="btn primary" style="flex:none;height:40px" data-tab="home">ဈေးဝယ်မည်</button></div>`;
+  $("#cartExtra").classList.toggle("hidden", !lines.length);
+  $("#promo").value = promo;
+  $("#cartSummary").innerHTML = summaryHTML();
+}
+function renderCheckout(){
+  $("#checkoutSummary").innerHTML = cartLines().map(l => `<div><span>${esc(l.p.name)} ×${l.q}</span><span>${fmt(unitPrice(l.p,l.si)*l.q)}</span></div>`).join("") +
+    `<div style="border-top:1px solid var(--sep);margin-top:6px"></div>` + summaryHTML();
+  const pay = new FormData($("#form")).get("pay");
+  const notes = {KBZPay:"📱 အော်ဒါတင်ပြီးနောက် KBZPay နံပါတ်ကို Admin မှ ပို့ပေးပါမည်။", WavePay:"🌊 အော်ဒါတင်ပြီးနောက် WavePay နံပါတ်ကို Admin မှ ပို့ပေးပါမည်။",
+    AYAPay:"🏦 AYA Pay ငွေလွှဲ အချက်အလက်ကို Admin မှ ပို့ပေးပါမည်။", CBPay:"💳 CB Pay ငွေလွှဲ အချက်အလက်ကို Admin မှ ပို့ပေးပါမည်။",
+    Installment:"🗓️ အရစ်ကျအတွက် မှတ်ပုံတင်နှင့် အလုပ်အကိုင် အထောက်အထား လိုအပ်ပါမည်။", COD:"💵 ပစ္စည်းရောက်မှ ငွေချေနိုင်ပါသည်။"};
+  $("#payNote").textContent = notes[pay] || "";
+}
+const STATUS = {pending:"အတည်ပြုရန် စောင့်ဆိုင်း"};
+function renderOrders(){
+  $("#orderList").innerHTML = orders.length ? orders.map(o => `
+    <div class="order"><header><b>#${o.id}</b><span class="status">${STATUS[o.status]||o.status}</span></header>
+      <div class="muted" style="font-size:11.5px;margin-bottom:6px">${new Date(o.date).toLocaleString()}</div>
+      <ul>${o.items.map(i=>`<li>${esc(i.name)} ${i.option?`(${esc(i.option)})`:""} ×${i.qty}</li>`).join("")}</ul>
+      <footer><span>${esc(o.payment)} · ${esc(o.customer.zone)}</span><b>${fmt(o.total)}</b></footer>
+      <button class="btn outline" style="height:36px;margin-top:10px;width:100%" data-reorder="${o.id}">🔁 ထပ်မံမှာယူမည်</button></div>`).join("")
+    : `<div class="empty"><span class="big">📦</span>အော်ဒါ မရှိသေးပါ</div>`;
+}
+function renderBadges(){
+  const n = cartCount(), w = wish.length;
+  $("#cartBadge").textContent = n; $("#cartBadge").classList.toggle("hidden", !n);
+  $("#wishBadge").textContent = w; $("#wishBadge").classList.toggle("hidden", !w);
+}
+
+/* ===================== NAVIGATION ===================== */
+const TABS = ["home","wish","cart","orders"];
+function show(v, push=true){
+  if (push && v!==view) history_.push({view, detail: detail && {...detail}});
+  view = v;
+  document.querySelectorAll(".view").forEach(s => s.classList.toggle("hidden", s.id !== "v-"+v));
+  const tabbed = TABS.includes(v);
+  $("#tabs").classList.toggle("hidden", !tabbed);
+  document.body.classList.toggle("notabs", !tabbed);
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab===v));
+  if (tg) (v==="home" || v==="done") ? tg.BackButton.hide() : tg.BackButton.show();
+  window.scrollTo(0,0);
+  refresh();
+}
+function goBack(){
+  const prev = history_.pop();
+  if (!prev) { if (view!=="home") show("home", false); return; }
+  detail = prev.detail; show(prev.view, false);
+}
+function openDetail(id){ haptic(); detail = {id:+id, ci:0, si:0, qty:1}; show("detail"); }
+if (tg) tg.BackButton.onClick(goBack);
+
+function refresh(){
+  renderBadges();
+  if (view==="home") renderHome();
+  if (view==="detail") renderDetail();
+  if (view==="wish") renderWish();
+  if (view==="cart") renderCart();
+  if (view==="checkout") renderCheckout();
+  if (view==="orders") renderOrders();
+  updateMain();
+}
+function updateMain(){
+  const n = cartCount();
+  if (view==="home" || view==="wish") setMain(n ? `🛒 ခြင်းတောင်း (${n}) · ${fmt(subtotal())}` : "", () => show("cart"));
+  else if (view==="detail") {
+    const p = byId(detail.id);
+    setMain(p.stock ? `ခြင်းတောင်းထဲ ထည့်မည် · ${fmt(unitPrice(p,detail.si)*detail.qty)}` : "", () => addToCart(p.id, detail.ci, detail.si, detail.qty) && updateMain());
+  }
+  else if (view==="cart") setMain(n ? `ငွေရှင်းမည် · ${fmt(grandTotal())}` : "", () => show("checkout"));
+  else if (view==="checkout") setMain(`အော်ဒါ တင်မည် · ${fmt(grandTotal())}`, submitOrder);
+  else if (view==="done") setMain(inTG ? "ပိတ်မည်" : "ဆက်လက် ဈေးဝယ်မည်", () => inTG ? tg.close() : (history_.length=0, show("home", false)));
+  else setMain("", null);
+}
+
+/* ===================== ORDER ===================== */
+async function submitOrder(){
+  const f = $("#form"); let ok = true;
+  f.querySelectorAll("[required]").forEach(el => {
+    const v = el.value.trim();
+    const bad = !v || (el.name==="phone" && !/^(\+?95|0)?9\d{7,10}$/.test(v.replace(/[\s-]/g,"")));
+    el.closest(".field").classList.toggle("err", bad); if (bad) ok = false;
+  });
+  if (!ok) { notify("error"); toast("⚠️ အချက်အလက်များ မှန်ကန်စွာ ဖြည့်ပါ"); f.querySelector(".err input, .err textarea")?.focus(); return; }
+  if (!cartCount()) return;
+
+  const fd = new FormData(f); const st = subtotal();
+  const zone = CONFIG.ZONES.find(z => z.id===fd.get("zone"));
+  const order = {
+    id: "SM" + Date.now().toString().slice(-7),
+    date: new Date().toISOString(), status: "pending",
+    customer: { name:fd.get("name").trim(), phone:fd.get("phone").trim(), zone: zone.label, address:fd.get("address").trim(), note:(fd.get("note")||"").trim() },
+    payment: fd.get("pay"),
+    items: cartLines().map(l => ({id:l.p.id, name:l.p.name, option:[l.p.colors?.[l.ci]?.n, l.p.storage?.[l.si]?.s].filter(Boolean).join(" / "), price:unitPrice(l.p,l.si), qty:l.q, key:l.k})),
+    subtotal: st, discount: promoDiscount(st), promo: CONFIG.PROMOS[promo] ? promo : "", delivery: shipping(st), total: grandTotal(),
+    user: tgUser ? {id:tgUser.id, username:tgUser.username||"", name:[tgUser.first_name,tgUser.last_name].filter(Boolean).join(" ")} : null,
+  };
+  store.set("customer", order.customer);
+
+  mainLoading(true);
+  try {
+    if (CONFIG.ORDER_API) {
+      const r = await fetch(CONFIG.ORDER_API, {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({initData: tg?.initData || "", order})});
+      if (!r.ok) throw new Error("HTTP "+r.status);
+    }
+    orders.unshift(order); orders = orders.slice(0,30);
+    cart = {}; promo = ""; persist(); notify();
+    if (!CONFIG.ORDER_API && inTG) {
+      // Works when opened from the bot's reply-keyboard button. Telegram closes the app after this.
+      tg.disableClosingConfirmation?.();
+      tg.sendData(JSON.stringify({...order, items: order.items.map(({key, ...i}) => i)}));
+      return;
+    }
+    $("#orderId").textContent = "Order ID: #" + order.id;
+    history_.length = 0; show("done", false);
+  } catch (e) {
+    notify("error"); toast("❌ အော်ဒါ မတင်နိုင်ပါ။ ထပ်ကြိုးစားပါ");
+  } finally { mainLoading(false); }
+}
+
+/* ===================== EVENTS ===================== */
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-wish],[data-quick],[data-open],[data-cat],[data-brand],[data-tab],[data-back],[data-ci],[data-si],[data-dq],[data-addd],[data-buynow],[data-rm],[data-lq],[data-reorder],[data-reset]");
+  if (!t) return;
+  const d = t.dataset;
+  if (d.wish) { e.stopPropagation(); toggleWish(+d.wish); return; }
+  if (d.quick) { e.stopPropagation(); const p = byId(d.quick); if (p.colors?.length > 1 || p.storage?.length > 1) openDetail(p.id); else addToCart(p.id); updateMain(); return; }
+  if (d.back !== undefined) { goBack(); return; }
+  if (d.tab) { haptic("soft"); history_.length = 0; show(d.tab, false); return; }
+  if (d.cat) { filter.cat = d.cat; haptic("soft"); renderHome(); return; }
+  if (d.brand) { filter.brand = d.brand; haptic("soft"); renderHome(); return; }
+  if (d.reset !== undefined) { filter = {cat:"all", brand:"all", q:"", sort:"default", price:"all"}; $("#q").value=""; $("#price").value="all"; $("#sort").value="default"; renderHome(); return; }
+  if (d.ci) { detail.ci = +d.ci; haptic("soft"); refresh(); return; }
+  if (d.si) { detail.si = +d.si; haptic("soft"); refresh(); return; }
+  if (d.dq) { const p = byId(detail.id); detail.qty = Math.max(1, Math.min(p.stock||1, detail.qty + +d.dq)); haptic("soft"); refresh(); return; }
+  if (d.addd !== undefined) { addToCart(detail.id, detail.ci, detail.si, detail.qty); return; }
+  if (d.buynow !== undefined) { if (addToCart(detail.id, detail.ci, detail.si, detail.qty)) show("cart"); return; }
+  if (d.rm) { setLineQty(d.rm, 0); return; }
+  if (d.lq) { setLineQty(d.lq, (cart[d.lq]||0) + +d.d); return; }
+  if (d.reorder) {
+    const o = orders.find(o => o.id===d.reorder); let added = 0;
+    o.items.forEach(i => { const p = byId(i.id); if (p && p.stock && i.key) { cart[i.key] = Math.min(p.stock, (cart[i.key]||0) + i.qty); added++; } });
+    persist(); toast(added ? "✅ ခြင်းတောင်းထဲ ထည့်ပြီးပါပြီ" : "❌ ပစ္စည်း မရနိုင်တော့ပါ"); if (added) show("cart", false); return;
+  }
+  if (d.open) openDetail(d.open);
+});
+$("#q").addEventListener("input", e => { filter.q = e.target.value; renderHome(); });
+$("#sort").addEventListener("change", e => { filter.sort = e.target.value; renderHome(); });
+$("#price").addEventListener("change", e => { filter.price = e.target.value; renderHome(); });
+$("#promoBtn").onclick = () => {
+  const code = $("#promo").value.trim().toUpperCase();
+  if (!code) { promo = ""; persist(); refresh(); return; }
+  if (CONFIG.PROMOS[code]) { promo = code; notify(); toast("🎁 " + CONFIG.PROMOS[code].label); }
+  else { notify("error"); toast("❌ Promo code မမှန်ပါ"); }
+  persist(); refresh();
+};
+$("#form").addEventListener("input", e => e.target.closest(".field")?.classList.remove("err"));
+$("#form").addEventListener("change", () => refresh());
+
+/* hero carousel */
+let slide = 0;
+$("#heroTrack").innerHTML = SLIDES.map((s,i) => `<div class="hero" style="background:${s.bg}">
+  <span class="pill">${s.pill}</span><h1>${s.h}</h1><p>${s.p}</p>
+  <button class="hbtn" data-slide="${i}">${s.btn} →</button><div class="art">${phoneSVG(s.ph.h, s.ph.cam)}</div></div>`).join("");
+$("#dots").innerHTML = SLIDES.map((_,i)=>`<i class="${i?"":"on"}"></i>`).join("");
+function goSlide(i){ slide = (i+SLIDES.length)%SLIDES.length; $("#heroTrack").style.transform = `translateX(-${slide*100}%)`;
+  document.querySelectorAll("#dots i").forEach((d,j)=>d.classList.toggle("on", j===slide)); }
+let timer = setInterval(()=>goSlide(slide+1), 4500);
+$("#heroTrack").addEventListener("click", e => { const b = e.target.closest("[data-slide]"); if (!b) return;
+  const go = SLIDES[+b.dataset.slide].go; if (go.open) openDetail(go.open); else $("#listTop").scrollIntoView({behavior:"smooth"}); });
+let sx = null;
+$("#heroTrack").addEventListener("touchstart", e => sx = e.touches[0].clientX, {passive:true});
+$("#heroTrack").addEventListener("touchend", e => { if (sx===null) return; const dx = e.changedTouches[0].clientX - sx;
+  if (Math.abs(dx) > 40) { goSlide(slide + (dx<0?1:-1)); clearInterval(timer); timer = setInterval(()=>goSlide(slide+1), 4500); } sx = null; });
+
+let toastT;
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),1700); }
+
+/* ===================== INIT ===================== */
+$("#zone").innerHTML = CONFIG.ZONES.map(z => `<option value="${z.id}">${z.label} — ပို့ခ ${fmt(z.fee)}</option>`).join("");
+const saved = store.get("customer", null);
+const f = $("#form");
+if (saved) { f.name.value = saved.name||""; f.phone.value = saved.phone||""; f.address.value = saved.address||""; const z = CONFIG.ZONES.find(z=>z.label===saved.zone); if (z) f.zone.value = z.id; }
+else if (tgUser) f.name.value = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(" ");
+$("#hello").innerHTML = tgUser ? `မင်္ဂလာပါ 👋<b>${esc(tgUser.first_name)}</b>` : `မင်္ဂလာပါ 👋<b>ကြိုဆိုပါတယ်</b>`;
+
+function start(){ show("home", false); }
+if (inTG && tg.CloudStorage) {
+  try { tg.CloudStorage.getItem("cart2", (err, v) => { if (!err && v) { try { const c = JSON.parse(v); if (c && typeof c==="object") cart = c; } catch {} } start(); }); }
+  catch { start(); }
+} else start();
+</script>
+</body>
+</html>
