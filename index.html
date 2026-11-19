@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Something Mobile Shop</title>
+<title>Top Star Mobile</title>
 <meta name="description" content="Myanmar mobile phone & accessories shop — Telegram Mini App">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -221,7 +221,7 @@ body.notabs .fab{bottom:14px}
   <section id="v-home" class="view">
     <header class="top">
       <div class="logo"><span></span></div>
-      <div class="brand"><b>SOMETHING</b><small>MOBILE SHOP</small></div>
+      <div class="brand"><b>TOP STAR</b><small>MOBILE</small></div>
       <div class="hello" id="hello"></div>
     </header>
 
@@ -347,7 +347,7 @@ body.notabs .fab{bottom:14px}
 <script>
 /* ===================== CONFIG ===================== */
 const CONFIG = {
-  SHOP_NAME: "Something Mobile Shop",
+  SHOP_NAME: "Top Star Mobile",
   ADMIN_USERNAME: "your_admin_username",   // Telegram username for support (without @)
   ORDER_API: "",                           // optional backend URL (POST JSON). Empty = use tg.sendData (reply-keyboard launch)
   FREE_SHIPPING_OVER: 1000000,
@@ -424,7 +424,7 @@ function phoneSVG(hex, cam="tri"){
     <rect x="4" y="4" width="102" height="212" rx="18" fill="url(#${id})"/>
     <path d="M4 60 Q55 40 106 20 L106 4 L4 4Z" fill="#fff" opacity=".08"/>
     ${camera}
-    <text x="55" y="160" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="${shade(hex,-.35)}" opacity=".5">SOMETHING</text>
+    <text x="55" y="160" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="${shade(hex,-.35)}" opacity=".5">TOP STAR</text>
   </svg>`;
 }
 function visual(p, colorIdx=0){
@@ -744,7 +744,7 @@ async function submitOrder(){
   const fd = new FormData(f); const st = subtotal();
   const zone = CONFIG.ZONES.find(z => z.id===fd.get("zone"));
   const order = {
-    id: "SM" + Date.now().toString().slice(-7),
+    id: "TS" + Date.now().toString().slice(-7),
     date: new Date().toISOString(), status: "pending",
     customer: { name:fd.get("name").trim(), phone:fd.get("phone").trim(), zone: zone.label, address:fd.get("address").trim(), note:(fd.get("note")||"").trim() },
     payment: fd.get("pay"),

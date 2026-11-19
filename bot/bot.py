@@ -1,5 +1,5 @@
 """
-Something Mobile Shop — Telegram bot that opens the Mini App and receives orders.
+Top Star Mobile — Telegram bot that opens the Mini App and receives orders.
 
 pip install python-telegram-bot==21.6
 set env vars:  BOT_TOKEN, WEBAPP_URL (https URL of webapp/index.html), ADMIN_CHAT_ID (your chat id)
@@ -28,7 +28,7 @@ async def start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         resize_keyboard=True,
     )
     await update.message.reply_text(
-        "မင်္ဂလာပါ 🙏 Something Mobile Shop မှ ကြိုဆိုပါတယ်။\n"
+        "မင်္ဂလာပါ 🙏 Top Star Mobile မှ ကြိုဆိုပါတယ်။\n"
         "အောက်က ခလုတ်ကို နှိပ်ပြီး ပစ္စည်းများ ကြည့်ရှု မှာယူနိုင်ပါတယ်။",
         reply_markup=kb,
     )

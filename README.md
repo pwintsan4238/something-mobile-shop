@@ -1,4 +1,4 @@
-# Something Mobile Shop — Telegram Mini App
+# Top Star Mobile — Telegram Mini App
 
 Mobile phone e-commerce store built as a Telegram Mini App (works in a normal browser too).
 
