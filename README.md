@@ -29,7 +29,7 @@ write `Out of Stock` in the Stock Status column to stop sales of that option.
 - 38 models / 55 price options from the Top Star Mobile price list (Xiaomi/Redmi, Samsung, Honor, Nubia, M Horse, Thai Global)
 - Filters: brand, CEIR Paid / Official 1-year warranty / Thai Global, tablets, price range; search by model, brand or RAM/ROM (e.g. `Note 17`, `A17`, `8+256`)
 - Product page with RAM/ROM options (each with its own price), colors available for that option, stock status, installment estimate, other models from the same brand, share
-- Wishlist, cart with quantity limits by stock, promo codes (`WELCOME5`, `PHONE10`)
+- Wishlist, cart (max 5 per item), promo codes (`WELCOME5`, `PHONE10`)
 - Delivery zones with free shipping over 1,000,000 Ks
 - Checkout: COD, KBZPay, WavePay, AYA Pay, CB Pay, installment
 - Order history with one-tap re-order
@@ -38,7 +38,7 @@ write `Out of Stock` in the Stock Status column to stop sales of that option.
 ## Customize
 Edit the top of the `<script>` in `index.html`:
 - `CONFIG` — admin username, delivery zones, free-shipping limit, promo codes
-- `PRODUCTS` — name, price, `was` (old price), stock, colors, storage, specs. Add `img: "https://..."` to use a real photo.
+- Products and prices — update the Excel file and re-run the importer (see above). Add `"img": "https://..."` to a product in `products.js` to use a real photo.
 - `SLIDES` — banner carousel
 
 Push to `main` and GitHub Pages updates in about a minute.
